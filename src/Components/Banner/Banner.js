@@ -1,16 +1,29 @@
 import React from 'react';
+import { useEffect, useState } from 'react';
+import  {API_KEY, imageUrl} from '../../Constants/Constant'
+import axios from '../../Axios ';
 import './Banner.css'
 
 function Banner() {
-  return (
-    <div className='banner'>
+
+    const [movie, setMovie] = useState();
+
+    useEffect(() => { 
+        axios.get(`trending/all/week?api_key=${API_KEY}&language=en-US`).then((response) => {
+            // console.log(response.data.results[0]);
+            setMovie(response.data.results[0]);
+        })
+    },[])
+
+  return ( 
+    <div className='banner' style={{backgroundImage: `url(${imageUrl+movie?.backdrop_path})`}}>
         <div  className='content'>
-            <h1 className='title'> Movie Name</h1>
+            <h1 className='title'> `{movie?.title}`</h1>
             <div className='banner-buttons'>
                 <button className='button'>Play</button>
                 <button className='button'>My List</button>
             </div>
-            <h1 className='description'> It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages,versions of Lorem Ipsum.</h1>
+            <h1 className='description'> {movie?.overview}</h1>
         </div>
         <div className="fade_bottom"></div>
     </div>

@@ -15,7 +15,17 @@
 }
 
 .poster {
+    max-width: 400px;
+    margin-right: 10px;
+}
+
+.poster:hover {
+    transform: scale(.95);
+}
+
+.smallPoster {
     max-width: 250px;
     margin-right: 10px;
-
 }
+ 
+
