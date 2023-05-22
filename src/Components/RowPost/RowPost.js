@@ -6,6 +6,7 @@
 
  
  function RowPost(props) {
+
     const [movies, setMovies] = useState([]);
     const [urlId, setUrlId] = useState('');
 
@@ -15,33 +16,28 @@
         })
     },[])
 
-    console.log(movies)
-
     const movieTrailer = (movieId) => {
         axios.get(`/movie/${movieId}/videos?api_key=${API_KEY}&language=en-US`).then((response) => {
             console.log("this is video data  ......",response.data);
             if(response.data.results.length > 0) {
-                setUrlId(response.data.results[0]);
+                setUrlId(response.data?.results[0]);
             } else {
-                console.log("Empty array ...")
+                window.alert("Video Unavailable")
             }
         })
     }
 
     const opts = {
-        height: '390',
+        height: '400',
         width: '100%',
         playerVars: {
           autoplay: 1,
         },
     };
 
-
-    // console.log(" this is url id--",urlId)
-
     return (
      <div className='row'>
-        <h2 style={{paddingLeft: "1%", paddingTop: "1%"}} > {props?.key}</h2>
+        <h2 style={{paddingLeft: "1%", paddingTop: "1%"}} onClick={() => {setVideo(false)}}> {props?.title}</h2>
         <div className="posters">
             {
                 movies.map((item) => 
@@ -49,9 +45,11 @@
                 )
             }
         </div>
-        { urlId && <YouTube videoId={urlId?.key} opts={opts} onReady={this._onReady} />}
+        { urlId ? <YouTube videoId={urlId?.key} opts={opts} /> : null } 
      </div>
    )
+
  }
+
  
  export default RowPost;
