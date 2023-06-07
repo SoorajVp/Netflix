@@ -3,6 +3,7 @@
  import axios from '../../Axios'
  import YouTube from 'react-youtube'
  import "./RowPost.css"
+import ShimmerPosts from '../ShimmerPosts/ShimmerPosts';
 
  
  function RowPost(props) {
@@ -17,6 +18,7 @@
     },[])
 
     const movieTrailer = (movieId) => {
+        setUrlId(false)
         axios.get(`/movie/${movieId}/videos?api_key=${API_KEY}&language=en-US`).then((response) => {
             console.log("this is video data  ......",response.data);
             if(response.data.results.length > 0) {
@@ -34,20 +36,28 @@
           autoplay: 1,
         },
     };
+    if( movies.length === 0 ) {
 
-    return (
-     <div className='row'>
-        <h2 style={{paddingLeft: "1%", paddingTop: "1%"}} onClick={() => {setVideo(false)}}> {props?.title}</h2>
-        <div className="posters">
-            {
-                movies.map((item) => 
-                    <img className={ props.isSmall ? "smallPoster" : 'poster'} src={`${imageUrl+item?.backdrop_path}`} alt="poster" onClick={() => { movieTrailer(item?.id)}} />
-                )
-            }
-        </div>
-        { urlId ? <YouTube videoId={urlId?.key} opts={opts} /> : null } 
-     </div>
-   )
+        return <ShimmerPosts />
+
+    } else {
+
+        return (
+            <div className='row'>
+               <h2 style={{paddingLeft: "1%" , paddingTop: "1%"}} onClick={() => {setVideo(false)}}> {props?.title}</h2>
+               <div className="posters">
+                   {
+                       movies.map((item) => 
+                           <img className={ props.isSmall ? "smallPoster" : 'poster'} src={`${imageUrl+item?.backdrop_path}`} alt="poster" onClick={() => { movieTrailer(item?.id)}} />
+                       )
+                   }
+               </div>
+               { urlId  ? <YouTube videoId={urlId?.key} opts={opts} /> : null } 
+            </div>
+          )
+       
+    }
+
 
  }
 
